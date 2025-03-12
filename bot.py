@@ -1,5 +1,7 @@
 import discord
 import os
+import requests
+import json
 from dotenv import load_dotenv
 from enum import Enum
 
@@ -27,6 +29,29 @@ answer= ''
 category = ''
 value = 0
 
+## updates clue and corresponding info
+def new_clue():
+    global clue
+    global answer
+    global category
+    global value
+    try:
+        response = requests.get(CLUE_API).json()
+        clue = response['clue_question']
+        answer = response['clue_answer']
+        category = response['clue_category']
+        temp = response['clue_value']
+        if temp == 'DD' or temp == 'FINAL':
+            new_clue()
+        else:
+            value = str(temp.replace('$',''))
+    except:
+        print('Error here bruh')
+        clue = 'Error getting clue from API.'
+        answer = ''
+        category = 'Error'
+        value = 0
+
 ##################################################
 
 @client.event
@@ -46,7 +71,7 @@ async def on_message(message):
             text = 'SCORES \n'
             for player in scores:
                 text = text + player + ': ' + str(scores[player]) + '\n'
-            await message.channel.send(text)  
+            await message.channel.send(text)   
         else:
             await message.channel.send('No scores at the moment.')
         return 
@@ -61,13 +86,16 @@ async def on_message(message):
         await message.channel.send(text)
         return 
 
-    if state = State.Playing:
+    if state == State.Playing:
         if message.content.startswith('!stop'):
             state = State.Stopped
             return
         else:
             ''' handle answer attempts'''
     
-    '''TODO - !play and !stop'''
+    if state == State.Stopped:
+        if message.content.startswith('!play'):
+            state = State.Playing
+            return
 
 client.run(TOKEN)
