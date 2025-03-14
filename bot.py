@@ -120,6 +120,11 @@ async def on_message(message):
     ## Ignore messages the bot has sent.
     if message.author == client.user:
         return
+    
+    ## Easter egg
+    if message.content.startswith('!anderspestididwhat'):
+        await message.channel.send('Anders Pesti slimed out Alex Baker on March 13, 2025.')
+        return
 
     ## Display scores at any moment
     if message.content.startswith('!score'):
