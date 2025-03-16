@@ -1,11 +1,11 @@
-Bot to play trivia.
+# Bot to play trivia.
 
-Shoutout Anders. 
+### Shoutout Anders. 
 
-Commands:
+#### Commands:
 
-!play  -- starts the game
-!stop  -- stops the game
-!score -- prints the scores of all the players
-!help  -- prints all the commands and what they do
+##### !play  -- starts the game
+##### !stop  -- stops the game
+##### !score -- prints the scores of all the players
+##### !help  -- prints all the commands and what they do
 
