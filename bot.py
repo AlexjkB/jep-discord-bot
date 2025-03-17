@@ -160,6 +160,7 @@ def check_answer(guess):
 ##################################################
 @tasks.loop(seconds=8.0, count=1)
 async def clue_loop():
+    print("Starting clue...")
     global answer_lock
     global clue
     global answer
@@ -174,12 +175,14 @@ async def clue_loop():
 
 @clue_loop.after_loop
 async def after_clue_loop():
+    print("Ending clue...")
     global state
     if state == State.Playing:
         answer_loop.start()
 
 @tasks.loop(seconds=2.0, count=1)
 async def answer_loop():
+    print("Starting answer...")
     global answer_lock
     global answer
     global channel
@@ -189,6 +192,7 @@ async def answer_loop():
 
 @answer_loop.after_loop
 async def after_answer_loop():
+    print("Ending answer...")
     global state
     if state == State.Playing:
         clue_loop.start()
@@ -251,6 +255,7 @@ async def on_message(message):
             if not answer_lock:
                 account = message.author.name
                 if check_answer(message.content):
+                    print('CORRECT ANSWER')
                     if account not in scores:
                         scores[account] = int(value)
                     else:
@@ -258,12 +263,12 @@ async def on_message(message):
                     text = account + ' got the answer correct!'
                     await message.channel.send(text)
                     clue_loop.cancel()
-                    answer_loop.start()
                 else:
                     if account not in scores:
                         scores[account] = 0 - int(value)
                     else:
                         scores[account] -= int(value)
+        return
     
     if state == State.Stopped:
         if message.content.startswith('!play'):
