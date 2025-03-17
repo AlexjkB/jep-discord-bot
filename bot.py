@@ -160,7 +160,6 @@ def check_answer(guess):
 ##################################################
 @tasks.loop(seconds=8.0, count=1)
 async def clue_loop():
-    print("Starting clue...")
     global answer_lock
     global clue
     global answer
@@ -175,14 +174,12 @@ async def clue_loop():
 
 @clue_loop.after_loop
 async def after_clue_loop():
-    print("Ending clue...")
     global state
     if state == State.Playing:
         answer_loop.start()
 
 @tasks.loop(seconds=2.0, count=1)
 async def answer_loop():
-    print("Starting answer...")
     global answer_lock
     global answer
     global channel
@@ -192,7 +189,6 @@ async def answer_loop():
 
 @answer_loop.after_loop
 async def after_answer_loop():
-    print("Ending answer...")
     global state
     if state == State.Playing:
         clue_loop.start()
