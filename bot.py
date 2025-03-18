@@ -2,7 +2,6 @@ import discord
 from discord.ext import tasks, commands
 import os
 import requests
-import json
 from dotenv import load_dotenv
 from enum import Enum
 from itertools import combinations
@@ -251,7 +250,6 @@ async def on_message(message):
             if not answer_lock:
                 account = message.author.name
                 if check_answer(message.content):
-                    print('CORRECT ANSWER')
                     if account not in scores:
                         scores[account] = int(value)
                     else:
